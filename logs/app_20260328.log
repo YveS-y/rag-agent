@@ -1,0 +1,2 @@
+2026-03-28 12:15:18.880 | INFO     | 04-test_graph_flow.py:<module>       :8    - ===== 开始测试 =====
+2026-03-28 12:15:18.911 | INFO     | node_entry.py       :node_entry     :26   - >>> [node_entry] 开始执行了，现在状态为:{'task_id': '', 'is_md_read_enabled': False, 'is_pdf_read_enabled': False, 'local_dir': '', 'local_file_path': '万用表RS-12的使用.pdf', 'file_title': '', 'pdf_path': '', 'md_path': '', 'md_content': '', 'chunks': [], 'item_name': '', 'embeddings_content': []}

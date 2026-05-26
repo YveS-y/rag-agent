@@ -1,0 +1,79 @@
+2026-03-25 22:46:49.470 | INFO     | 02-日志测试.py          :<module>       :18   - 用户 ID: 1001 登录成功
+2026-03-25 22:46:49.475 | INFO     | 02-日志测试.py          :<module>       :19   - 订单 #9527 已创建，金额：¥299.00
+2026-03-25 22:46:49.476 | INFO     | 02-日志测试.py          :<module>       :20   - 系统健康检查通过
+2026-03-25 22:46:49.476 | SUCCESS  | 02-日志测试.py          :<module>       :25   - 数据备份完成！文件已保存至 /backup/2026-03-15.zip
+2026-03-25 22:46:49.477 | SUCCESS  | 02-日志测试.py          :<module>       :26   - 模型训练结束，准确率达到 98.5%
+2026-03-25 22:46:49.477 | WARNING  | 02-日志测试.py          :<module>       :31   - 配置文件缺少 'TIMEOUT' 字段，使用默认值 30s
+2026-03-25 22:46:49.477 | WARNING  | 02-日志测试.py          :<module>       :32   - 检测到 API 响应时间超过 2s，性能可能下降
+2026-03-25 22:46:49.477 | WARNING  | 02-日志测试.py          :<module>       :33   - 用户密码强度较弱，建议修改
+2026-03-25 22:46:49.478 | ERROR    | 02-日志测试.py          :<module>       :38   - 无法连接到 Redis 服务器：Connection refused
+2026-03-25 22:46:49.478 | ERROR    | 02-日志测试.py          :<module>       :39   - 用户 ID: 1002 的数据解析失败，跳过该记录
+2026-03-25 22:46:49.478 | CRITICAL | 02-日志测试.py          :<module>       :44   - 磁盘空间已满！无法写入任何新数据，系统即将停止服务
+2026-03-25 22:46:49.478 | CRITICAL | 02-日志测试.py          :<module>       :45   - 核心加密密钥丢失，安全模块初始化失败
+2026-03-25 22:46:49.479 | ERROR    | 02-日志测试.py          :<module>       :55   - 发生除零错误，计算终止
+Traceback (most recent call last):
+
+> File "/Users/ys/code/agent/RagCode/RagStudy/test/02-日志测试.py", line 52, in <module>
+    divide(10, 0)
+    └ <function divide at 0x102268cc0>
+
+  File "/Users/ys/code/agent/RagCode/RagStudy/test/02-日志测试.py", line 49, in divide
+    return a / b
+           │   └ 0
+           └ 10
+
+ZeroDivisionError: division by zero
+2026-03-25 23:02:02.575 | INFO     | state.py            :<module>       :99   - {'task_id': '', 'is_pdf_read_enabled': False, 'is_md_read_enabled': False, 'is_normal_split_enabled': True, 'is_silicon_flow_api_enabled': True, 'is_advanced_split_enabled': False, 'is_vllm_enabled': False, 'local_dir': '', 'local_file_path': '万用表RS-12的使用.pdf', 'pdf_path': '', 'md_path': '', 'file_title': '', 'split_path': '', 'embeddings_path': '', 'md_content': '', 'chunks': [], 'item_name': '', 'embeddings_content': []}
+2026-03-25 23:04:13.007 | INFO     | state.py            :<module>       :99   - {'task_id': '', 'is_pdf_read_enabled': False, 'is_md_read_enabled': False, 'is_normal_split_enabled': True, 'is_silicon_flow_api_enabled': True, 'is_advanced_split_enabled': False, 'is_vllm_enabled': False, 'local_dir': '', 'local_file_path': '万用表RS-12的使用.pdf', 'pdf_path': '', 'md_path': '', 'file_title': '', 'split_path': '', 'embeddings_path': '', 'md_content': '', 'chunks': [], 'item_name': '', 'embeddings_content': []}
+2026-03-25 23:09:55.856 | INFO     | state.py            :<module>       :99   - {'task_id': '', 'is_pdf_read_enabled': False, 'is_md_read_enabled': False, 'is_normal_split_enabled': True, 'is_silicon_flow_api_enabled': True, 'is_advanced_split_enabled': False, 'is_vllm_enabled': False, 'local_dir': '', 'local_file_path': '万用表RS-12的使用.pdf', 'pdf_path': '', 'md_path': '', 'file_title': '', 'split_path': '', 'embeddings_path': '', 'md_content': '', 'chunks': [], 'item_name': '', 'embeddings_content': []}
+2026-03-25 23:34:38.249 | INFO     | state.py            :<module>       :99   - {'task_id': '', 'is_pdf_read_enabled': False, 'is_md_read_enabled': False, 'is_normal_split_enabled': True, 'is_silicon_flow_api_enabled': True, 'is_advanced_split_enabled': False, 'is_vllm_enabled': False, 'local_dir': '', 'local_file_path': '万用表RS-12的使用.pdf', 'pdf_path': '', 'md_path': '', 'file_title': '', 'split_path': '', 'embeddings_path': '', 'md_content': '', 'chunks': [], 'item_name': '', 'embeddings_content': []}
+2026-03-25 23:40:19.244 | INFO     | 04-test_graph_flow.py:<module>       :8    - ===== 开始测试 =====
+2026-03-25 23:40:19.278 | INFO     | node_entry.py       :node_entry     :16   - >>> [Stub] 执行节点: node_entry
+2026-03-25 23:40:19.280 | INFO     | 04-test_graph_flow.py:<module>       :16   - 节点: node_entry
+2026-03-25 23:40:19.281 | INFO     | 04-test_graph_flow.py:<module>       :20   - 最终状态: {
+    "task_id": "",
+    "is_md_read_enabled": false,
+    "is_pdf_read_enabled": false,
+    "local_dir": "",
+    "local_file_path": "万用表RS-12的使用.pdf",
+    "file_title": "",
+    "pdf_path": "",
+    "md_path": "",
+    "md_content": "",
+    "chunks": [],
+    "item_name": "",
+    "embeddings_content": []
+}
+2026-03-25 23:40:19.281 | INFO     | 04-test_graph_flow.py:<module>       :22   - 图结构:
+2026-03-25 23:40:19.296 | INFO     | 04-test_graph_flow.py:<module>       :26   - ===== 测试结束 =====
+2026-03-25 23:43:32.109 | INFO     | 04-test_graph_flow.py:<module>       :8    - ===== 开始测试 =====
+2026-03-25 23:43:32.138 | INFO     | node_entry.py       :node_entry     :16   - >>> [Stub] 执行节点: node_entry
+2026-03-25 23:43:32.140 | INFO     | 04-test_graph_flow.py:<module>       :16   - 节点: node_entry
+2026-03-25 23:43:32.140 | INFO     | node_pdf_to_md.py   :node_pdf_to_md :16   - >>> [Stub] 执行节点: node_pdf_to_md
+2026-03-25 23:43:32.141 | INFO     | 04-test_graph_flow.py:<module>       :16   - 节点: node_pdf_to_md
+2026-03-25 23:43:32.141 | INFO     | node_md_img.py      :node_md_img    :16   - >>> [Stub] 执行节点: node_md_img
+2026-03-25 23:43:32.142 | INFO     | 04-test_graph_flow.py:<module>       :16   - 节点: node_md_img
+2026-03-25 23:43:32.142 | INFO     | node_document_split.py:node_document_split:15   - >>> [Stub] 执行节点: node_document_split
+2026-03-25 23:43:32.143 | INFO     | 04-test_graph_flow.py:<module>       :16   - 节点: node_document_split
+2026-03-25 23:43:32.143 | INFO     | node_item_name_recognition.py:node_item_name_recognition:15   - >>> [Stub] 执行节点: node_item_name_recognition
+2026-03-25 23:43:32.143 | INFO     | 04-test_graph_flow.py:<module>       :16   - 节点: node_item_name_recognition
+2026-03-25 23:43:32.144 | INFO     | node_bge_embedding.py:node_bge_embedding:15   - >>> [Stub] 执行节点: node_bge_embedding
+2026-03-25 23:43:32.144 | INFO     | 04-test_graph_flow.py:<module>       :16   - 节点: node_bge_embedding
+2026-03-25 23:43:32.145 | INFO     | node_import_milvus.py:node_import_milvus:15   - >>> [Stub] 执行节点: node_import_milvus
+2026-03-25 23:43:32.145 | INFO     | 04-test_graph_flow.py:<module>       :16   - 节点: node_import_milvus
+2026-03-25 23:43:32.145 | INFO     | 04-test_graph_flow.py:<module>       :20   - 最终状态: {
+    "task_id": "",
+    "is_md_read_enabled": false,
+    "is_pdf_read_enabled": true,
+    "local_dir": "",
+    "local_file_path": "万用表RS-12的使用.pdf",
+    "file_title": "",
+    "pdf_path": "",
+    "md_path": "",
+    "md_content": "",
+    "chunks": [],
+    "item_name": "",
+    "embeddings_content": []
+}
+2026-03-25 23:43:32.146 | INFO     | 04-test_graph_flow.py:<module>       :22   - 图结构:
+2026-03-25 23:43:32.150 | INFO     | 04-test_graph_flow.py:<module>       :26   - ===== 测试结束 =====
