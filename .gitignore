@@ -1,0 +1,57 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ===== 环境与密钥 =====
+.env
+.env.*
+!.env.example
+
+# ===== 日志 =====
+logs/
+*.log
+
+# ===== 大型二进制文件 =====
+*.doc
+*.docx
+*.pdf
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.xlsx
+*.xls
+*.pptx
+
+# ===== 测试文档目录（大量 PDF，不入库）=====
+doc/
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ===== 模型权重（本地缓存）=====
+models/
+*.bin
+*.pt
+*.pth
+*.safetensors
+*.gguf
