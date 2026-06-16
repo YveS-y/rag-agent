@@ -1,0 +1,11 @@
+kafka topic权限问题，
+用户test对topic demo1有生产数据和消费数据的权限，但是不能有创建其他topic或者删除topic的权限，那么需要在guardian上进行如下配置：
+1.guardian上，针对test用户，添加话题权限，针对demo1这个话题添加read和write权限；
+2.test用户消费数据时必须指定消费者组名，假设消费者组名为test2group，那么在guardian上，针对test用户，添加消费者组权限，针对test2group这个消费者组添加read权限；
+3.完成上述两个设定后，在没有配置其他权限的情况下，test用户就无法创建新的topic或删除topic。
+认证
+关于kerberos认证过程，您需要下载用户的keytab文件到服务器上，先用klist -kt命令看一下这个keytab文件中的principle信息；
+然后创建一个jaas.conf文件，类似下图，然后执行kafka脚本之前，export一下这个jaas.conf文件 以及krb5.conf文件即可
+
+
+导入7个节点
