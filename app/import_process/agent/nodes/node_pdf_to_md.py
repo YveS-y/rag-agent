@@ -48,19 +48,6 @@ from app.conf.mineru_config import mineru_config
      7. 路径转成字符串 获取绝对路径最终返回即可！
 """
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 def step_1_validate_paths(state):
     """
     进行路径校验！ pdf_path失效 直接异常处理!

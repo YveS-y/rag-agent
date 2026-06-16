@@ -13,3 +13,11 @@ L1 核心内容过了。来写 L1 Spec（50-80 字），三段式：做什么 / 
 
 上一段是整体的规划，现在是定义入口，
 首先第一个节点是路由节点，根据输入的文件格式，指向不同的下一个节点，输入的格式只支持.PDF和.md,其他格式直接静默结束，识别到具体格式后，将结果写到state中，通过图的判断实现流转的过程
+
+
+url = f"{mineru_config.base_url}/extract-results/batch/{batch_id}"
+    timeout_seconds = 600  # 1s -> 1页pdf
+    poll_interval = 3  #间隔时间是3秒
+    start_time = time.time() # 进去起始时间
+
+    每次轮询间隔3秒，最多轮询3*600秒，抛出RuntimeError异常
