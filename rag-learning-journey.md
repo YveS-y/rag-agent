@@ -496,7 +496,13 @@ rag-agent 有完整的导入图和查询图。读：
 
 **关键取舍**：两张独立图解耦导入与查询，各自独立迭代；图片源文件存 MinIO，描述文字回填 MD 与正文一起进 Milvus，避免图片内容丢失。
 
-### L1 · 导入图路由（待学员补写）
+### L1 · 导入图路由
+
+**做什么**：node_entry 根据文件后缀（.pdf/.md）判断类型，设置 state 中的布尔开关；route_after_entry 读取开关做条件路由，PDF 经 node_pdf_to_md → node_md_img 合流，MD 直达 node_md_img。同时提取 file_title 作为 item_name 识别兜底。
+
+**不做什么**：不支持 .pdf/.md 以外的格式，静默走 END 终止不报错；不负责实际解析和切分。
+
+**关键取舍**：路由逻辑放图内而非 API 层，修改时只需改 node_entry 和 main_graph，不影响外部调用方。
 
 ### L2 · PDF处理链（待学员补写）
 
