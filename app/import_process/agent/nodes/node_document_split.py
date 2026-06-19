@@ -2,7 +2,6 @@ import re
 import json
 import os
 import sys
-from turtledemo.penrose import start
 # 统一类型注解，避免混用any/Any
 from typing import List, Dict, Any, Tuple
 # LangChain文本分割器（标注核心用途，便于理解）

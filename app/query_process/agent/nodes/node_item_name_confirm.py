@@ -4,7 +4,6 @@ import json
 import logging
 from typing import List, Dict, Any, Optional
 from langchain_core.messages import SystemMessage, HumanMessage
-from mpmath import limit
 
 from app.conf.milvus_config import milvus_config
 from app.core.load_prompt import load_prompt
