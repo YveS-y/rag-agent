@@ -44,3 +44,11 @@ def get_project_root(identifier: str = ".env") -> Path:
 
 
 PROJECT_ROOT = get_project_root(".env")
+
+
+def load_active_profile() -> None:
+    """根据 APP_ENV（local/cloud）加载 .env.{APP_ENV}，覆盖 .env 中同名的基础设施变量"""
+    app_env = os.getenv("APP_ENV", "cloud")
+    profile_path = PROJECT_ROOT / f".env.{app_env}"
+    if profile_path.exists():
+        load_dotenv(dotenv_path=profile_path, override=True)

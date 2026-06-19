@@ -2,9 +2,12 @@
 from dataclasses import dataclass
 import os
 from dotenv import load_dotenv
+from app.utils.path_util import load_active_profile
 
 # 提前加载.env配置文件（确保os.getenv能获取到MinIO相关配置）
 load_dotenv()
+# 按 APP_ENV（local/cloud）加载对应的 .env.{APP_ENV}，覆盖 MinIO 地址等基础设施配置
+load_active_profile()
 
 
 # 定义MinIO对象存储服务配置（与LLMConfig风格一致，字段对应.env配置项）
