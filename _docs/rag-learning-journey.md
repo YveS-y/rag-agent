@@ -131,14 +131,14 @@
 ## 📍 §4 当前进度快照（⚠️ 学员每次收工自己更新）
 
 ```yaml
-当前关卡: L4
-关卡名称: BGE-M3 混合向量化
+当前关卡: L5
+关卡名称: 导入收尾：item_name 识别 + Milvus 入库
 状态: IN_PROGRESS
-上次提问时间: 2026-06-19
-上次 AI 提的问题: BGE-M3 稠密/稀疏向量怎么调用、两种向量存 Milvus 哪个字段；chunk 入库前为什么要拼 item_name；batch_size 三股力（GPU显存/吞吐效率/失败重试成本）你设了多少
-上次学员回答摘要: （未开始，本次只给出 Preview+Question，学员选择先记录进度，下次接着答）
+上次提问时间: 2026-06-21
+上次 AI 提的问题: （L4 已通关，L5 尚未开始提问）
+上次学员回答摘要: L4 全部通关——BGE-M3 dense+sparse 调用方式、CSR稀疏矩阵indices/indptr/data还原逻辑、batch_size三股力(显存/吞吐/重试)及"该值继承自参考代码、未在本机环境实测"的关键发现，Spec已落库
 遗留追问: （无）
-下一步: 打开 node_bge_embedding.py 和 embedding_utils.py，按上面 3 个 Question 逐个回答
+下一步: 打开 node_item_name_recognition.py 和 node_import_milvus.py，按 L5 的 3 个 Question 逐个回答
 ```
 
 ---
@@ -153,7 +153,7 @@
 - [x] **L1** ⭐ 导入图：节点链 + 条件路由 ⏱20min
 - [x] **L2** PDF处理链：node_pdf_to_md + node_md_img ⏱15min
 - [x] **L3** ⭐ 2段切片策略 ⏱20min
-- [ ] **L4** ⭐ BGE-M3 混合向量化 ⏱20min
+- [x] **L4** ⭐ BGE-M3 混合向量化 ⏱20min
 - [ ] **L5** 导入收尾：item_name识别 + Milvus入库 ⏱15min
 - [ ] **L6** ⭐ 查询图：路由 + item_name_confirm ⏱20min
 - [ ] **L7** ⭐ 3路并行召回 ⏱20min
@@ -520,7 +520,13 @@ rag-agent 有完整的导入图和查询图。读：
 
 **关键取舍**：先按标题切分保证语义完整，再用 500-2000 字符区间做二次精修——超过2000继续切、低于500与同标题块合并；这是在召回精度（偏好小chunk）与 LLM 生成质量（偏好大chunk）之间的折中选择。
 
-### L4 · node_bge_embedding（待学员补写）
+### L4 · node_bge_embedding
+
+**做什么**：接收上游节点传来的 chunk 列表，调用 BGE-M3 模型同时生成稠密向量和稀疏向量，按 5 条一批分批处理，结果同步写入 state 的 dense/sparse 两个字段。
+
+**不做什么**：不做失败重试；不负责把向量写入 Milvus（留给下一个节点）。
+
+**关键取舍**：稀疏向量是批量返回的 CSR 压缩格式（indices+data+indptr），需按 indptr 边界拆解出每条 chunk 自己的部分，再用 zip 配对转成 `{维度:权重}` 字典；稠密向量同样要转 list 但不需要拆批量还原。batch_size=5 是继承参考代码的值，未结合本机（Mac M4，统一内存非独立显存）实测验证，后续要用真实 chunk 数据做基准测试后再定生产值。
 
 ### L5 · 导入收尾（node_item_name_recognition + node_import_milvus）（待学员补写）
 
