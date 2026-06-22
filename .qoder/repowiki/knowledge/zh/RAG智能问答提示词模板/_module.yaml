@@ -1,0 +1,8 @@
+schema_version: 1
+module_path: prompts
+title: RAG智能问答提示词模板
+scope:
+    - prompts/
+source_files: []
+depends_on: []
+related_to: []

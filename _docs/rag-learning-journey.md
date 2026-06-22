@@ -131,14 +131,14 @@
 ## 📍 §4 当前进度快照（⚠️ 学员每次收工自己更新）
 
 ```yaml
-当前关卡: L5
-关卡名称: 导入收尾：item_name 识别 + Milvus 入库
+当前关卡: L6
+关卡名称: 查询图：路由 + item_name_confirm
 状态: IN_PROGRESS
-上次提问时间: 2026-06-21
-上次 AI 提的问题: （L4 已通关，L5 尚未开始提问）
-上次学员回答摘要: L4 全部通关——BGE-M3 dense+sparse 调用方式、CSR稀疏矩阵indices/indptr/data还原逻辑、batch_size三股力(显存/吞吐/重试)及"该值继承自参考代码、未在本机环境实测"的关键发现，Spec已落库
+上次提问时间: 2026-06-22
+上次 AI 提的问题: L5 3 个 Question 全部通关
+上次学员回答摘要: L5 全部通关——item_name文档级不变量(LLM取样本调1次广播，file_title兜底为防御性死代码)；Milvus 9字段schema两列两索引(稠密HNSW+COSINE/稀疏倒排+IP)；先删后插保证幂等但有数据丢失风险，Spec已落库
 遗留追问: （无）
-下一步: 打开 node_item_name_recognition.py 和 node_import_milvus.py，按 L5 的 3 个 Question 逐个回答
+下一步: 打开 query_process/agent/main_graph.py 和 node_item_name_confirm.py，按 L6 的 3 个 Question 逐个回答
 ```
 
 ---
@@ -154,7 +154,7 @@
 - [x] **L2** PDF处理链：node_pdf_to_md + node_md_img ⏱15min
 - [x] **L3** ⭐ 2段切片策略 ⏱20min
 - [x] **L4** ⭐ BGE-M3 混合向量化 ⏱20min
-- [ ] **L5** 导入收尾：item_name识别 + Milvus入库 ⏱15min
+- [x] **L5** 导入收尾：item_name识别 + Milvus入库 ⏱15min
 - [ ] **L6** ⭐ 查询图：路由 + item_name_confirm ⏱20min
 - [ ] **L7** ⭐ 3路并行召回 ⏱20min
 - [ ] **L8** ⭐ RRF融合 + Cross-Encoder精排 ⏱20min
@@ -528,7 +528,13 @@ rag-agent 有完整的导入图和查询图。读：
 
 **关键取舍**：稀疏向量是批量返回的 CSR 压缩格式（indices+data+indptr），需按 indptr 边界拆解出每条 chunk 自己的部分，再用 zip 配对转成 `{维度:权重}` 字典；稠密向量同样要转 list 但不需要拆批量还原。batch_size=5 是继承参考代码的值，未结合本机（Mac M4，统一内存非独立显存）实测验证，后续要用真实 chunk 数据做基准测试后再定生产值。
 
-### L5 · 导入收尾（node_item_name_recognition + node_import_milvus）（待学员补写）
+### L5 · 导入收尾（node_item_name_recognition + node_import_milvus）
+
+**做什么**：LLM 取前几个 chunk 当样本调 1 次识别文档级 item_name，广播给所有 chunk；9 字段写入 Milvus，按 item_name 先删后插保幂等。
+
+**不做什么**：识别节点不入库；入库节点不调 LLM、不重试。
+
+**关键取舍**：item_name 是文档级不变量，文件名有噪声故用 LLM 语义提取而非正则；稠密 HNSW+COSINE 比方向、稀疏倒排+IP 比交集；先删后插存在插入失败时旧数据已删的丢失风险。
 
 ### L6 · 查询图路由 + node_item_name_confirm（待学员补写）
 

@@ -15,6 +15,14 @@
 - [task_utils.py](file://app/utils/task_utils.py)
 </cite>
 
+## 更新摘要
+**所做更改**
+- 更新了node_pdf_to_md节点的实现分析，反映了移除的详细中文注释文档
+- 修正了PDF处理流程的描述，基于当前实际代码实现
+- 更新了node_md_img节点的详细分析，包含最新的图片处理流程
+- 补充了完整的错误处理和异常情况说明
+- 更新了配置参数说明，反映当前的配置结构
+
 ## 目录
 1. [简介](#简介)
 2. [项目结构](#项目结构)
@@ -70,7 +78,7 @@ classDef default fill:#fff,stroke:#333,color:#000
 
 **章节来源**
 - [state.py:5-91](file://app/import_process/agent/state.py#L5-L91)
-- [node_pdf_to_md.py:260-305](file://app/import_process/agent/nodes/node_pdf_to_md.py#L260-L305)
+- [node_pdf_to_md.py:247-292](file://app/import_process/agent/nodes/node_pdf_to_md.py#L247-L292)
 - [node_md_img.py:310-358](file://app/import_process/agent/nodes/node_md_img.py#L310-L358)
 
 ## 架构总览
@@ -108,7 +116,7 @@ TASK --> NIMG
 - [lm_utils.py:17-73](file://app/lm/lm_utils.py#L17-L73)
 - [load_prompt.py:5-28](file://app/core/load_prompt.py#L5-L28)
 - [rate_limit_utils.py:7-36](file://app/utils/rate_limit_utils.py#L7-L36)
-- [node_pdf_to_md.py:260-305](file://app/import_process/agent/nodes/node_pdf_to_md.py#L260-L305)
+- [node_pdf_to_md.py:247-292](file://app/import_process/agent/nodes/node_pdf_to_md.py#L247-L292)
 - [node_md_img.py:310-358](file://app/import_process/agent/nodes/node_md_img.py#L310-L358)
 - [state.py:5-91](file://app/import_process/agent/state.py#L5-L91)
 - [task_utils.py:68-109](file://app/utils/task_utils.py#L68-L109)
@@ -144,10 +152,10 @@ Node-->>Caller : "返回state"
 ```
 
 **图表来源**
-- [node_pdf_to_md.py:260-305](file://app/import_process/agent/nodes/node_pdf_to_md.py#L260-L305)
-- [node_pdf_to_md.py:64-93](file://app/import_process/agent/nodes/node_pdf_to_md.py#L64-L93)
-- [node_pdf_to_md.py:96-181](file://app/import_process/agent/nodes/node_pdf_to_md.py#L96-L181)
-- [node_pdf_to_md.py:182-257](file://app/import_process/agent/nodes/node_pdf_to_md.py#L182-L257)
+- [node_pdf_to_md.py:247-292](file://app/import_process/agent/nodes/node_pdf_to_md.py#L247-L292)
+- [node_pdf_to_md.py:51-80](file://app/import_process/agent/nodes/node_pdf_to_md.py#L51-L80)
+- [node_pdf_to_md.py:83-168](file://app/import_process/agent/nodes/node_pdf_to_md.py#L83-L168)
+- [node_pdf_to_md.py:169-244](file://app/import_process/agent/nodes/node_pdf_to_md.py#L169-L244)
 - [task_utils.py:68-109](file://app/utils/task_utils.py#L68-L109)
 
 关键实现要点：
@@ -156,9 +164,9 @@ Node-->>Caller : "返回state"
 - 异常处理：对路径不存在、上传失败、解析超时、下载失败、未找到.md等情况抛出异常并终止流程。
 
 **章节来源**
-- [node_pdf_to_md.py:64-93](file://app/import_process/agent/nodes/node_pdf_to_md.py#L64-L93)
-- [node_pdf_to_md.py:96-181](file://app/import_process/agent/nodes/node_pdf_to_md.py#L96-L181)
-- [node_pdf_to_md.py:182-257](file://app/import_process/agent/nodes/node_pdf_to_md.py#L182-L257)
+- [node_pdf_to_md.py:51-80](file://app/import_process/agent/nodes/node_pdf_to_md.py#L51-L80)
+- [node_pdf_to_md.py:83-168](file://app/import_process/agent/nodes/node_pdf_to_md.py#L83-L168)
+- [node_pdf_to_md.py:169-244](file://app/import_process/agent/nodes/node_pdf_to_md.py#L169-L244)
 - [mineru_config.py:17-20](file://app/conf/mineru_config.py#L17-L20)
 - [task_utils.py:68-109](file://app/utils/task_utils.py#L68-L109)
 
@@ -228,12 +236,12 @@ IMG->>TASK : "add_done_task('node_md_img')"
 ```
 
 **图表来源**
-- [node_pdf_to_md.py:289-295](file://app/import_process/agent/nodes/node_pdf_to_md.py#L289-L295)
+- [node_pdf_to_md.py:278-290](file://app/import_process/agent/nodes/node_pdf_to_md.py#L278-L290)
 - [node_md_img.py:326-355](file://app/import_process/agent/nodes/node_md_img.py#L326-L355)
 - [task_utils.py:68-109](file://app/utils/task_utils.py#L68-L109)
 
 **章节来源**
-- [node_pdf_to_md.py:289-295](file://app/import_process/agent/nodes/node_pdf_to_md.py#L289-L295)
+- [node_pdf_to_md.py:278-290](file://app/import_process/agent/nodes/node_pdf_to_md.py#L278-L290)
 - [node_md_img.py:326-355](file://app/import_process/agent/nodes/node_md_img.py#L326-L355)
 - [task_utils.py:68-109](file://app/utils/task_utils.py#L68-L109)
 
@@ -283,8 +291,6 @@ IMG --> STATE
 - IO优化：解压目录以原文件名为名，避免重复解压导致的IO浪费；上传前先清理同名对象，减少冗余存储。
 - 并发与缓存：LLM客户端采用全局缓存，避免重复初始化带来的开销。
 
-[本节为通用性能建议，不直接分析具体文件]
-
 ## 故障排查指南
 常见异常与处理：
 - 路径校验失败：pdf_path或local_dir不存在，抛出异常；检查输入路径与权限。
@@ -302,20 +308,17 @@ IMG --> STATE
 - 中间文件：核对output/<pdf_stem>/<pdf_stem>_result.zip与images目录。
 
 **章节来源**
-- [node_pdf_to_md.py:75-88](file://app/import_process/agent/nodes/node_pdf_to_md.py#L75-L88)
-- [node_pdf_to_md.py:116-121](file://app/import_process/agent/nodes/node_pdf_to_md.py#L116-L121)
-- [node_pdf_to_md.py:134-141](file://app/import_process/agent/nodes/node_pdf_to_md.py#L134-L141)
-- [node_pdf_to_md.py:150-154](file://app/import_process/agent/nodes/node_pdf_to_md.py#L150-L154)
-- [node_pdf_to_md.py:193-195](file://app/import_process/agent/nodes/node_pdf_to_md.py#L193-L195)
-- [node_pdf_to_md.py:223-225](file://app/import_process/agent/nodes/node_pdf_to_md.py#L223-L225)
-- [node_md_img.py:81-86](file://app/import_process/agent/nodes/node_md_img.py#L81-L86)
+- [node_pdf_to_md.py:62-64](file://app/import_process/agent/nodes/node_pdf_to_md.py#L62-L64)
+- [node_pdf_to_md.py:104-107](file://app/import_process/agent/nodes/node_pdf_to_md.py#L104-L107)
+- [node_pdf_to_md.py:138-141](file://app/import_process/agent/nodes/node_pdf_to_md.py#L138-L141)
+- [node_pdf_to_md.py:177-182](file://app/import_process/agent/nodes/node_pdf_to_md.py#L177-L182)
+- [node_pdf_to_md.py:208-212](file://app/import_process/agent/nodes/node_pdf_to_md.py#L208-L212)
+- [node_md_img.py:84-86](file://app/import_process/agent/nodes/node_md_img.py#L84-L86)
 - [node_md_img.py:264-266](file://app/import_process/agent/nodes/node_md_img.py#L264-L266)
 - [task_utils.py:68-109](file://app/utils/task_utils.py#L68-L109)
 
 ## 结论
 PDF处理管道通过node_pdf_to_md与node_md_img实现了从PDF到结构化Markdown的完整链路，结合MineRU解析、MinIO存储与多模态模型，形成可扩展的中间文件生成与图片处理能力。通过状态机与任务状态管理，流程具备良好的可观测性与可维护性。
-
-[本节为总结性内容，不直接分析具体文件]
 
 ## 附录
 
@@ -337,9 +340,9 @@ J --> K["结束"]
 ```
 
 **图表来源**
-- [node_pdf_to_md.py:64-93](file://app/import_process/agent/nodes/node_pdf_to_md.py#L64-L93)
-- [node_pdf_to_md.py:96-181](file://app/import_process/agent/nodes/node_pdf_to_md.py#L96-L181)
-- [node_pdf_to_md.py:182-257](file://app/import_process/agent/nodes/node_pdf_to_md.py#L182-L257)
+- [node_pdf_to_md.py:51-80](file://app/import_process/agent/nodes/node_pdf_to_md.py#L51-L80)
+- [node_pdf_to_md.py:83-168](file://app/import_process/agent/nodes/node_pdf_to_md.py#L83-L168)
+- [node_pdf_to_md.py:169-244](file://app/import_process/agent/nodes/node_pdf_to_md.py#L169-L244)
 
 ### 关键参数配置说明
 - MineRU配置（mineru_config）
