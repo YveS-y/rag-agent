@@ -2,24 +2,16 @@
 schema_version: 1
 locale: zh-CN
 branch: main
-exported_at: "2026-06-22T02:04:47Z"
+nodes_managed: true
+exported_at: "2026-06-22T09:29:23Z"
 modules:
     "":
         dir_name: RAG智能体系统编排
         title: RAG智能体系统编排
-        scope:
-            - .gitignore
-            - CLAUDE.md
-            - pyproject.toml
-            - uv.lock
-            - docker-compose.yml
-            - _docs/
-            - _learn/
-            - scripts/
-            - test/
-            - volumes/
+        scope: []
         source_files: []
-        children: []
+        children:
+            - prompts
         depends_on: []
         related_to: []
     prompts:

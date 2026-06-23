@@ -131,14 +131,14 @@
 ## 📍 §4 当前进度快照（⚠️ 学员每次收工自己更新）
 
 ```yaml
-当前关卡: L6
-关卡名称: 查询图：路由 + item_name_confirm
+当前关卡: L9
+关卡名称: SSE流式回答 + 对话历史
 状态: IN_PROGRESS
 上次提问时间: 2026-06-22
-上次 AI 提的问题: L5 3 个 Question 全部通关
-上次学员回答摘要: L5 全部通关——item_name文档级不变量(LLM取样本调1次广播，file_title兜底为防御性死代码)；Milvus 9字段schema两列两索引(稠密HNSW+COSINE/稀疏倒排+IP)；先删后插保证幂等但有数据丢失风险，Spec已落库
+上次 AI 提的问题: L8 3个Question全部通关
+上次学员回答摘要: L8全部通关——RRF按排名融合(k=60防垄断+多路累加)、Cross-Encoder精排(问题+文档拼接编码)、Bi-Encoder召回vs Cross-Encoder精排分工、断崖截断动态topk，Spec已落库
 遗留追问: （无）
-下一步: 打开 query_process/agent/main_graph.py 和 node_item_name_confirm.py，按 L6 的 3 个 Question 逐个回答
+下一步: 打开 node_answer_output.py、sse_utils.py、mongo_history_utils.py，按L9的3个Question逐个回答
 ```
 
 ---
@@ -155,9 +155,9 @@
 - [x] **L3** ⭐ 2段切片策略 ⏱20min
 - [x] **L4** ⭐ BGE-M3 混合向量化 ⏱20min
 - [x] **L5** 导入收尾：item_name识别 + Milvus入库 ⏱15min
-- [ ] **L6** ⭐ 查询图：路由 + item_name_confirm ⏱20min
-- [ ] **L7** ⭐ 3路并行召回 ⏱20min
-- [ ] **L8** ⭐ RRF融合 + Cross-Encoder精排 ⏱20min
+- [x] **L6** ⭐ 查询图：路由 + item_name_confirm ⏱20min
+- [x] **L7** ⭐ 3路并行召回 ⏱20min
+- [x] **L8** ⭐ RRF融合 + Cross-Encoder精排 ⏱20min
 - [ ] **L9** SSE流式回答 + 对话历史 ⏱15min
 - [ ] **Final** Spec集 + 面试模拟 ⏱30min
 
@@ -536,11 +536,29 @@ rag-agent 有完整的导入图和查询图。读：
 
 **关键取舍**：item_name 是文档级不变量，文件名有噪声故用 LLM 语义提取而非正则；稠密 HNSW+COSINE 比方向、稀疏倒排+IP 比交集；先删后插存在插入失败时旧数据已删的丢失风险。
 
-### L6 · 查询图路由 + node_item_name_confirm（待学员补写）
+### L6 · 查询图路由 + node_item_name_confirm
 
-### L7 · 3路并行召回（待学员补写）
+**做什么**：LLM 提取 item_name 并结合历史对话重写查询，按分数阈值分确定/模糊/无匹配三级路由；确定→3路并行召回，模糊→提示用户明确，无匹配→提示重提。
 
-### L8 · node_rrf + node_rerank（待学员补写）
+**不做什么**：不负责实际检索；不提供交互式选择，只一次性提示。
+
+**关键取舍**：item_name 过滤防跨文档噪声（不过滤=语义混乱+合规风险）；结合历史重写 query 弥补"问法与答法向量距离远"的问题；fan-out 返回列表=并行执行。
+
+### L7 · 3路并行召回
+
+**做什么**：3路并行召回——直接向量检索（主路）、HyDE 假设性答案检索（增强路，多1次LLM）、MCP联网搜索（兜底路）；均用item_names做expr过滤防跨文档噪声。
+
+**不做什么**：不修改召回结果；MCP路不过滤item_name（联网内容不在本地库）。
+
+**关键取舍**：主路最可靠无额外成本；HyDE多付1次LLM换取口语化问题的召回提升；联网兜底覆盖知识库无内容的场景；3路并行而非串行，总耗时≈最慢一路。
+
+### L8 · node_rrf + node_rerank
+
+**做什么**：RRF按排名融合多路召回结果（k=60防头部垄断，同chunk多路命中分数累加）；Cross-Encoder精排（问题+文档拼接编码，精确但O(n)）；断崖截断动态topk（最多10最少1，分差≥0.5或≥25%即断崖）。
+
+**不做什么**：RRF不融合MCP路（MCP与本地数据不同源，单独在rerank合并）；不用Cross-Encoder做召回（太慢）。
+
+**关键取舍**：RRF按排名而非分数合并，解决多路分数量纲不一致；先粗筛(Bi-Encoder)再精排(Cross-Encoder)兼顾速度和精度；断崖截断避免低相关性文档混入最终结果。
 
 ### L9 · node_answer_output + SSE（待学员补写）
 

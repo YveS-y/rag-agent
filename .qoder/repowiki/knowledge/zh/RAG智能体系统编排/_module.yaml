@@ -1,17 +1,7 @@
 schema_version: 1
 module_path: ""
 title: RAG智能体系统编排
-scope:
-    - .gitignore
-    - CLAUDE.md
-    - pyproject.toml
-    - uv.lock
-    - docker-compose.yml
-    - _docs/
-    - _learn/
-    - scripts/
-    - test/
-    - volumes/
+scope: []
 source_files: []
 depends_on: []
 related_to: []
