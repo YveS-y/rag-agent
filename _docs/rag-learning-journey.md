@@ -131,14 +131,13 @@
 ## 📍 §4 当前进度快照（⚠️ 学员每次收工自己更新）
 
 ```yaml
-当前关卡: L9
-关卡名称: SSE流式回答 + 对话历史
-状态: IN_PROGRESS
-上次提问时间: 2026-06-22
-上次 AI 提的问题: L8 3个Question全部通关
-上次学员回答摘要: L8全部通关——RRF按排名融合(k=60防垄断+多路累加)、Cross-Encoder精排(问题+文档拼接编码)、Bi-Encoder召回vs Cross-Encoder精排分工、断崖截断动态topk，Spec已落库
+当前关卡: 🎓 已毕业
+关卡名称: rag-agent 精读通关
+状态: COMPLETE
+通关时间: 2026-06-22
+面试模拟: 5/5 全通过
+Spec归档: L0-L9 共10段
 遗留追问: （无）
-下一步: 打开 node_answer_output.py、sse_utils.py、mongo_history_utils.py，按L9的3个Question逐个回答
 ```
 
 ---
@@ -158,8 +157,8 @@
 - [x] **L6** ⭐ 查询图：路由 + item_name_confirm ⏱20min
 - [x] **L7** ⭐ 3路并行召回 ⏱20min
 - [x] **L8** ⭐ RRF融合 + Cross-Encoder精排 ⏱20min
-- [ ] **L9** SSE流式回答 + 对话历史 ⏱15min
-- [ ] **Final** Spec集 + 面试模拟 ⏱30min
+- [x] **L9** SSE流式回答 + 对话历史 ⏱15min
+- [x] **Final** Spec集 + 面试模拟 ⏱30min
 
 ---
 
@@ -560,7 +559,13 @@ rag-agent 有完整的导入图和查询图。读：
 
 **关键取舍**：RRF按排名而非分数合并，解决多路分数量纲不一致；先粗筛(Bi-Encoder)再精排(Cross-Encoder)兼顾速度和精度；断崖截断避免低相关性文档混入最终结果。
 
-### L9 · node_answer_output + SSE（待学员补写）
+### L9 · SSE流式输出 + 对话历史
+
+**做什么**：LLM流式输出token→Queue缓冲→SSE生成器(yield StreamingResponse)逐token推前端；对话历史存MongoDB（user消息含rewritten_query/item_names，assistant消息含答案），取最近10条；prompt按12000字符截断，context优先history。
+
+**不做什么**：不做向量化处理；不提前存user消息（等rewritten_query/item_names提取后再存）。
+
+**关键取舍**：background_tasks异步跑图+Queue桥接，主线程毫秒级返回；context优先于history填充prompt，防止超LLM窗口；user消息延迟到item_name_confirm存，保证历史记录关键字段完整。
 
 ---
 
