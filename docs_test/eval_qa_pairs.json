@@ -1,0 +1,47 @@
+[
+  {
+    "id": "A1-001",
+    "category": "A_监管合规",
+    "source_doc": "《消费金融公司管理办法》（金融监管总局2024年第4号令）",
+    "item_name": null,
+    "question": "TODO：例如「消费金融公司的注册资本最低要求是多少？」（导入A1后据真实条款替换）",
+    "reference_keywords": ["TODO：替换为条款中的关键数字/术语，如金额、章节号"],
+    "tags": ["条款类", "数值类"]
+  },
+  {
+    "id": "A3-001",
+    "category": "A_监管合规",
+    "source_doc": "《互联网金融逾期债务催收自律公约（试行）》",
+    "item_name": null,
+    "question": "TODO：例如「催收公约对催收时间段有什么限制？」",
+    "reference_keywords": ["TODO：替换为公约原文限制条款，如时间段、频次"],
+    "tags": ["条款类", "合规问答"]
+  },
+  {
+    "id": "B1-001",
+    "category": "B_产品合同",
+    "source_doc": "兴业消费金融「家庭消费贷」贷款合同",
+    "item_name": "家庭消费贷",
+    "question": "TODO：例如「家庭消费贷的年化利率是多少？」",
+    "reference_keywords": ["TODO：替换为合同中的真实利率数值/区间"],
+    "tags": ["数值类", "item_name识别"]
+  },
+  {
+    "id": "B9-001",
+    "category": "B_产品合同",
+    "source_doc": "招商银行「专享消费分期」信用卡业务条款",
+    "item_name": "招行专享消费分期",
+    "question": "TODO：例如「专享消费分期最长可以分多少期？」",
+    "reference_keywords": ["TODO：替换为条款中的真实分期期数/额度上限"],
+    "tags": ["数值类", "item_name识别"]
+  },
+  {
+    "id": "B-multi-001",
+    "category": "B_产品合同",
+    "source_doc": "多产品消歧测试（兴业「家庭消费贷」+ 招行「专享消费分期」等）",
+    "item_name": null,
+    "question": "TODO：故意不指定产品名的问题，例如「消费贷的提前还款有什么规定？」，用于测试 item_name_confirm 节点能否正确触发歧义澄清",
+    "reference_keywords": ["TODO：预期触发澄清提问，或预期返回的多产品列表"],
+    "tags": ["多产品消歧"]
+  }
+]
