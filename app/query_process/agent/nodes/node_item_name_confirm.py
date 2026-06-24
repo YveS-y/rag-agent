@@ -4,7 +4,6 @@ import json
 import logging
 from typing import List, Dict, Any, Optional
 from langchain_core.messages import SystemMessage, HumanMessage
-from mpmath import limit
 
 from app.conf.milvus_config import milvus_config
 from app.core.load_prompt import load_prompt
@@ -54,24 +53,16 @@ def step_4_query_milvus_item_names(item_names):
     :return:
            [{extracted:模型item_name,matches:[{item_name:xx,score:0.9...}]}]
     """
-    # 明确 我们一定做的混合查询 （稠密向量 + 稀疏向量）
     final_result = []
-    # 1. 获取milvus的客户端
     milvus_client = get_milvus_client()
-    # 2. 将item_name转成向量（稠密和稀疏） 【循环】
     embeddings = generate_embeddings(item_names)
-    # 3. 混合查询 （创建稠密和稀疏的AnnSearchRequest  ||  设置权重重排  ||  进行混合查询 ）
     for index,item_name in enumerate(item_names):
-        # 1. 获取当前item_name对应的向量
         dense_vector = embeddings["dense"][index]
         sparse_vector = embeddings["sparse"][index]
-        # 2. 拼对应的AnnSearchRequest
         reqs = create_hybrid_search_requests(
             dense_vector = dense_vector,
             sparse_vector = sparse_vector
         )
-        # 3. 定义权重重排
-        # 4. 进行混合检索
         response = hybrid_search(
             client=milvus_client,
             collection_name=milvus_config.item_name_collection,
@@ -88,7 +79,6 @@ def step_4_query_milvus_item_names(item_names):
              ]
           ]
         """
-        # 5. 结果解析
         matches = []  #当前item对应的匹配结果
         if response and len(response) > 0:
             for hit in response[0]:
@@ -100,12 +90,10 @@ def step_4_query_milvus_item_names(item_names):
                         "item_name":hit_name,
                         "score":score
                     })
-    # 4. 提取查询结果封装返回的数据格式
         final_result.append({
             "extracted":item_name, #模型给的！
             "matches":matches  # 查询到的
         })
-    # 5. 封装返回数据
     logger.info(f"查询向量数据库结果为：{final_result}")
     return final_result
 
@@ -128,29 +116,18 @@ def step_5_confirmed_and_optional_item_name(query_milvus_results):
           忽略
     思路： 1. 循环处理每个item_name列表和分  2. 高分 只要1个  3. 可选 可以要2   4. 不区分extracted:item_name 装到对应的 确认或者可选集合中
     """
-    #1. 准备两个列表 确认 可选的
     confirmed_item_names = [] #确定
     options_item_names = [] #可选
-    #2. 循环处理元数据 query_milvus_results
     for item_name_meta in query_milvus_results:
         extracted_name = item_name_meta.get("extracted")
         matches = item_name_meta.get("matches",[])
-        #3. 进行分数排序（倒序） || 列表推导式 提取0.85 || 0.6
-        # matches [{score: xx , item_name="" }]
         matches.sort(key=lambda x:x.get("score",0),reverse=True)
-        # >= 0.8 [{item_name: , score:},{}]
-        # 处理 -》 先处理高分 -》 有 -》 正常执行 || 如果没有 -》 才处理低分
         high_score_matches = [ x for x in matches if x.get("score",0) >= 0.85 ]
         middle_score_matches = [ x for x in matches if x.get("score",0) >= 0.6]
-        #4. 处理高分的列表 只有一个1  获取一个1  ||  多个【item_name = extracted 】 or 获取最高分的1个
-        # 4.1 只有一个，获取一个
         if len(high_score_matches) ==1:
             confirmed_item_names.append(high_score_matches[0].get("item_name"))
             continue
-        # 4.2 有多个高分
         if len(high_score_matches) >1:
-            # 同一个名 = 分不是1 也可能不是最高！！
-            # 优先考虑名字相同
             same_name_item = None
             for item in high_score_matches:
                 if item.get("item_name") == extracted_name:
@@ -160,14 +137,11 @@ def step_5_confirmed_and_optional_item_name(query_milvus_results):
                same_name_item = high_score_matches[0] #获取分数最高的
             confirmed_item_names.append(same_name_item.get("item_name"))
             continue
-            # 没有相同获取分数最高的
-        #5. 处理可选分数列表 给用户返回提示，可以多带几个，截取2个！
         if len(middle_score_matches) > 0:
             for item in middle_score_matches[:2]:
                 options_item_names.append(item.get("item_name"))
             continue
         logger.info(f"没有匹配的item_name，忽略：{extracted_name}")
-    #6. 处理返回结果即可(去重复)
     result = {
         "confirmed_item_names":list(set(confirmed_item_names)),
         "options_item_names":list(set(options_item_names))
@@ -188,13 +162,9 @@ def step_6_deal_list(state,item_results, history_chats,rewritten_query):
            ]
     :return:
     """
-    # 1. 先获取两个集合 （确认 | 可选的）
     confirmed_item_names = item_results.get("confirmed_item_names",[])
     options_item_names = item_results.get("options_item_names",[])
-    # 2. 确认集合有数据 （处理）
     if len(confirmed_item_names) > 0:
-        # 2.1 更新下聊天记录 -》 item_names - > confirmed_item_names (空着)
-        # 2.2 修改和存储state状态
         state['item_names'] = confirmed_item_names
         state['rewritten_query'] =rewritten_query
         state['history'] = history_chats
@@ -202,14 +172,12 @@ def step_6_deal_list(state,item_results, history_chats,rewritten_query):
             del state['answer']
         logger.info(f"有确定的item_name:{confirmed_item_names}")
         return state
-    # 3. 确认集合没数据，处理可选集合
     if len(options_item_names) > 0:
         option_names = '、'.join(options_item_names)
         answer = f"您是想咨询以下哪个商品：{option_names}?请下次提问明确商品名称！！"
         state['answer'] = answer
         logger.info(f"有可选的item_name:{options_item_names}")
         return state
-    # 4. 确认和可选集合都没数据 （处理）
     answer = "没有匹配的商品名，请重新提问！！"
     state['answer'] = answer
     logger.info(f"没有匹配的的item_name")
@@ -234,15 +202,9 @@ def node_item_name_confirm(state):
         7. 补充state状态 item_names rewritten_query  history
     """
     print(f"---node_item_name_confirm---开始处理")
-    # 记录任务开始
     add_running_task(state["session_id"], sys._getframe().f_code.co_name,state["is_stream"])
 
-    #  1. 获取历史条件记录（作为依据）
     history_chats = get_recent_messages(session_id=state["session_id"],limit=10) #  MongoDB 里取最近 10 条对话记录。
-    #  3. 利用模型lm -> 1. 提取item_names  2.重写提问内容
-    #  参数： state["original_query"] || history_chats
-    #  响应： { item_names : [华为 p60]  默认根据历史聊天记录给我们的！！ , rewritten_query : str }
-    #  1. 为啥问题要重写？
     """
        1. 消除指代歧义    他 Ta 它 不明确！  明确查询主体 item_name
        2. 补全上下文     他的问题需要有历史记录支持！ 

@@ -26,7 +26,7 @@ builder.set_entry_point("node_item_name_confirm")
 def route_after_node_item_name_confirm(state: QueryGraphState):
     if state.get('answer'):
         return "node_answer_output"
-    return "node_search_embedding","node_search_embedding_hyde","node_web_search_mcp"
+    return ["node_search_embedding","node_search_embedding_hyde","node_web_search_mcp"]
 
 builder.add_conditional_edges("node_item_name_confirm"
                               , route_after_node_item_name_confirm,

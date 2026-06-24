@@ -135,14 +135,15 @@ async def history(session_id: str,limit: int = 10):
     """
     # 获取历史对话
     chats =  get_recent_messages(session_id,limit)
-    # chat mongodb _id -> ObjectId -> 不能直接序列化 json
-    # items = []
-    # for chat in chats:
-    #     items.append(chat)
-    logger.info(f"查询历史对话，session_id = {session_id}成功！查询数据为：{chats}")
+    # chat mongodb _id -> ObjectId -> 不能直接序列化 json，转成字符串
+    items = []
+    for chat in chats:
+        chat["_id"] = str(chat["_id"])
+        items.append(chat)
+    logger.info(f"查询历史对话，session_id = {session_id}成功！查询数据为：{items}")
     return {
         "session_id":session_id,
-        "items": chats
+        "items": items
     }
 
 @app.delete("/history/{session_id}")

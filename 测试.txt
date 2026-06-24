@@ -1,0 +1,23 @@
+kafka topic权限问题，
+用户test对topic demo1有生产数据和消费数据的权限，但是不能有创建其他topic或者删除topic的权限，那么需要在guardian上进行如下配置：
+1.guardian上，针对test用户，添加话题权限，针对demo1这个话题添加read和write权限；
+2.test用户消费数据时必须指定消费者组名，假设消费者组名为test2group，那么在guardian上，针对test用户，添加消费者组权限，针对test2group这个消费者组添加read权限；
+3.完成上述两个设定后，在没有配置其他权限的情况下，test用户就无法创建新的topic或删除topic。
+认证
+关于kerberos认证过程，您需要下载用户的keytab文件到服务器上，先用klist -kt命令看一下这个keytab文件中的principle信息；
+然后创建一个jaas.conf文件，类似下图，然后执行kafka脚本之前，export一下这个jaas.conf文件 以及krb5.conf文件即可
+
+所以结论：4 个位置要改——state.py（类型声明+默认值）、node_entry.py（elif 分支）、main_graph.py（加节点+路由+边）、node_docx_to_md.py（新建）。
+L1 核心内容过了。来写 L1 Spec（50-80 字），三段式：做什么 / 不做什么 / 关键取舍。
+聚焦 node_entry + 导入图路由这块你刚学到的设计决策
+
+上一段是整体的规划，现在是定义入口，
+首先第一个节点是路由节点，根据输入的文件格式，指向不同的下一个节点，输入的格式只支持.PDF和.md,其他格式直接静默结束，识别到具体格式后，将结果写到state中，通过图的判断实现流转的过程
+
+
+url = f"{mineru_config.base_url}/extract-results/batch/{batch_id}"
+    timeout_seconds = 600  # 1s -> 1页pdf
+    poll_interval = 3  #间隔时间是3秒
+    start_time = time.time() # 进去起始时间
+
+    每次轮询间隔3秒，最多轮询3*600秒，抛出RuntimeError异常

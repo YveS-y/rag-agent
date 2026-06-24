@@ -1,0 +1,16 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: main
+nodes_managed: true
+exported_at: "2026-06-24T02:27:07Z"
+modules:
+    prompts:
+        dir_name: RAG智能问答提示词模板
+        title: RAG智能问答提示词模板
+        scope:
+            - prompts/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []

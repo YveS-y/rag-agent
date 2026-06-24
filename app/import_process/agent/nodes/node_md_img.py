@@ -17,7 +17,7 @@ from app.utils.task_utils import add_running_task, add_done_task
 # LLM客户端工具类（核心复用，替换原生OpenAI调用）
 from app.lm.lm_utils import get_llm_client
 # LangChain多模态依赖（消息构造+异常捕获）
-from langchain.messages import HumanMessage
+from langchain_core.messages import HumanMessage
 from langchain_core.exceptions import LangChainException
 # 项目配置
 from app.conf.minio_config import minio_config

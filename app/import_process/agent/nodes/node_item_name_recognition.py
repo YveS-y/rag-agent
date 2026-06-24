@@ -3,8 +3,6 @@ import os
 import sys
 from typing import List, Dict, Any, Tuple
 
-from attr.validators import max_len
-from onnxruntime.transformers.models.longformer.benchmark_longformer import find_onnx_model
 # 导入Milvus客户端（向量数据库核心操作）、数据类型枚举（定义集合Schema）
 from pymilvus import MilvusClient, DataType
 # 导入LangChain消息类（标准化大模型对话消息格式）

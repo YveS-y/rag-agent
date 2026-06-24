@@ -14,8 +14,12 @@ from bson import ObjectId
 # 导入dotenv模块：用于从.env文件加载环境变量，避免硬编码敏感配置（如MongoDB连接地址）
 from dotenv import load_dotenv
 
+from app.utils.path_util import load_active_profile
+
 # 加载.env文件中的环境变量，使os.getenv能读取到配置
 load_dotenv()
+# 按 APP_ENV（local/cloud）加载对应的 .env.{APP_ENV}，覆盖 MongoDB 地址等基础设施配置
+load_active_profile()
 
 
 class HistoryMongoTool:

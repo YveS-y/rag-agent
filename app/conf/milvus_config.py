@@ -2,9 +2,12 @@
 from dataclasses import dataclass
 import os
 from dotenv import load_dotenv
+from app.utils.path_util import load_active_profile
 
 # 提前加载.env配置文件（全局执行一次即可，无需重复写）
 load_dotenv()
+# 按 APP_ENV（local/cloud）加载对应的 .env.{APP_ENV}，覆盖 Milvus 地址等基础设施配置
+load_active_profile()
 
 # ===================== 其他配置类（LLM/Embedding）可放在上方，保持原有代码不变 =====================
 # ... 你的LLMConfig、EmbeddingConfig代码 ...
